@@ -58,6 +58,43 @@ class _MapaConRuta extends StatelessWidget {
     final esAmbos = sentido == 'ambos';
     const offsetM = 4.0;
 
+    // Línea circular: un solo recorrido (la "vuelta" es la misma ida).
+    // Se dibuja UNA línea sin offset y las flechas marcan el sentido del lazo.
+    if (linea.esCircular) {
+      if (linea.recorridoIda.isNotEmpty) {
+        polilineas.add(Polyline(
+          points: linea.recorridoIda,
+          color: Colors.blue[700]!,
+          strokeWidth: 4,
+        ));
+        if (linea.puntoPartidaIda != null) {
+          marcadores.add(marcadorPartida(LatLng(
+            linea.puntoPartidaIda!.latitud,
+            linea.puntoPartidaIda!.longitud,
+          )));
+        }
+        marcadores.addAll(generarFlechas(linea.recorridoIda));
+      }
+      final centro = linea.recorridoIda.isNotEmpty
+          ? linea.recorridoIda[linea.recorridoIda.length ~/ 2]
+          : const LatLng(-17.7834, -63.1822);
+      return Stack(
+        children: [
+          MapaWidget(
+            centroInicial: centro,
+            zoomInicial: 13,
+            polilineas: polilineas,
+            marcadores: marcadores,
+          ),
+          const Positioned(
+            bottom: 16,
+            left: 16,
+            child: _Leyenda(sentido: 'circular'),
+          ),
+        ],
+      );
+    }
+
     if (sentido == 'ida' || sentido == 'ambos') {
       if (linea.recorridoIda.isNotEmpty) {
         polilineas.add(Polyline(
@@ -153,12 +190,18 @@ class _Leyenda extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (sentido == 'circular')
+            _ItemLeyenda(
+                color: Colors.blue[700]!, texto: 'Recorrido circular'),
           if (sentido == 'ida' || sentido == 'ambos')
             _ItemLeyenda(color: Colors.blue[700]!, texto: 'Ida'),
           if (sentido == 'vuelta' || sentido == 'ambos')
             _ItemLeyenda(color: Colors.orange[700]!, texto: 'Vuelta'),
-          const _ItemLeyenda(color: Colors.green, texto: 'Partida'),
-          const _ItemLeyenda(color: Colors.red, texto: 'Llegada'),
+          if (sentido != 'circular') ...const [
+            _ItemLeyenda(color: Colors.green, texto: 'Partida'),
+            _ItemLeyenda(color: Colors.red, texto: 'Llegada'),
+          ] else
+            const _ItemLeyenda(color: Colors.green, texto: 'Partida'),
         ],
       ),
     );

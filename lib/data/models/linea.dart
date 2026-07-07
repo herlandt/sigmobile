@@ -100,6 +100,23 @@ class LineaDetalle {
         .toList();
   }
 
+  /// Línea CIRCULAR: el backend manda la vuelta idéntica a la ida (el micro
+  /// recorre un lazo en un solo sentido, p. ej. líneas 72 y 73). En ese caso
+  /// se dibuja UNA sola línea, sin separar ida/vuelta.
+  bool get esCircular {
+    if (recorridoIda.length < 2 ||
+        recorridoIda.length != recorridoVuelta.length) {
+      return false;
+    }
+    bool igual(LatLng a, LatLng b) =>
+        (a.latitude - b.latitude).abs() < 1e-6 &&
+        (a.longitude - b.longitude).abs() < 1e-6;
+    return igual(recorridoIda.first, recorridoVuelta.first) &&
+        igual(recorridoIda.last, recorridoVuelta.last) &&
+        igual(recorridoIda[recorridoIda.length ~/ 2],
+            recorridoVuelta[recorridoVuelta.length ~/ 2]);
+  }
+
   List<LatLng> recorridoPorSentido(String sentido) =>
       sentido == 'ida' ? recorridoIda : recorridoVuelta;
 
