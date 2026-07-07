@@ -9,8 +9,10 @@ class ApiServiceUsuario {
   ApiServiceUsuario() {
     _dio = Dio(BaseOptions(
       baseUrl: ApiEndpoints.baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 15),
+      // Timeouts amplios: el backend en Render (plan free) "duerme" tras ~15 min
+      // de inactividad y la primera petición tarda ~30-50 s en despertarlo.
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
       headers: {'Content-Type': 'application/json'},
     ));
 

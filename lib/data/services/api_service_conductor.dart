@@ -16,8 +16,10 @@ class ApiServiceConductor {
   ApiServiceConductor(this._tokens) {
     _dio = Dio(BaseOptions(
       baseUrl: AppConfig.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
+      // Timeouts amplios por el cold start del backend en Render (plan free):
+      // la primera petición tras inactividad puede tardar ~30-50 s en responder.
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
       headers: {'Content-Type': 'application/json'},
     ));
 
