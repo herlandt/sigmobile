@@ -3,8 +3,8 @@
 import '../config/app_config.dart';
 
 class ApiEndpoints {
-  // La URL base viene de AppConfig (configurable con --dart-define=API_BASE_URL).
-  // En el emulador Android, 10.0.2.2 apunta al localhost del PC (default).
+  // La URL base viene de AppConfig: por defecto el backend en Render (HTTPS).
+  // Para desarrollo local, override con --dart-define=API_BASE_URL=...
   static const String baseUrl = AppConfig.apiBaseUrl;
 
   // Autenticación

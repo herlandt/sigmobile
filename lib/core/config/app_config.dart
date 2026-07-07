@@ -1,29 +1,26 @@
 // lib/core/config/app_config.dart
 //
-// Configuración por entorno. Los valores se inyectan en tiempo de compilación
-// con --dart-define (no se hardcodea la IP/host en el código).
+// Configuración por entorno. Por defecto la app apunta al backend en producción
+// (Render), así que basta con `flutter run` — no hace falta ningún flag.
 //
 // Ejemplos:
-//   Emulador Android (default, no requiere flags):
+//   Producción (default, no requiere flags):
 //     flutter run
-//   Dispositivo físico en la LAN:
-//     flutter run --dart-define=API_BASE_URL=http://192.168.1.100:8000
-//   Producción (HTTPS/WSS):
-//     flutter build apk --dart-define=API_BASE_URL=https://api.midominio.com \
-//                       --dart-define=APP_ENV=production
+//   Backend local en el emulador Android (10.0.2.2 = localhost del PC):
+//     flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
+//   Backend local en un dispositivo físico en la misma Wi-Fi (IP del PC):
+//     flutter run --dart-define=API_BASE_URL=http://192.168.1.11:8000
 //
 // El WebSocket se deriva automáticamente de API_BASE_URL (http→ws, https→wss),
 // salvo que se defina WS_BASE_URL explícitamente.
 
 class AppConfig {
   /// URL base del backend HTTP/HTTPS.
-  /// Default: IP del PC en la LAN, para probar en un dispositivo físico.
-  /// - Dispositivo físico (misma Wi-Fi que el PC): usar la IP del PC (ej. 192.168.0.15).
-  /// - Emulador Android: pasar --dart-define=API_BASE_URL=http://10.0.2.2:8000
-  /// Si tu IP cambia, actualizá este valor (o pasá --dart-define al ejecutar).
+  /// Default: backend desplegado en Render (HTTPS) — la app conecta sin flags.
+  /// Para desarrollo contra un backend local, pasar --dart-define=API_BASE_URL=...
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://192.168.1.11:8000',
+    defaultValue: 'https://microbuses-sig-backend.onrender.com',
   );
 
   /// Override opcional del host del WebSocket. Vacío => se deriva de apiBaseUrl.
