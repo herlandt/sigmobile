@@ -1,0 +1,52 @@
+name: microbuses_sig
+description: Sistema de Información Geográfica para Microbuses - Santa Cruz de la Sierra
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Mapas y coordenadas
+  flutter_map: ^7.0.0
+  latlong2: ^0.9.0
+  flutter_polyline_points: ^2.0.0
+
+  # GPS
+  geolocator: ^12.0.0
+
+  # HTTP y WebSocket
+  dio: ^5.7.0
+  web_socket_channel: ^3.0.0
+
+  # Almacenamiento seguro del JWT
+  flutter_secure_storage: ^9.2.0
+
+  # Captura de fotos
+  image_picker: ^1.1.0
+
+  # Estado (Riverpod)
+  flutter_riverpod: ^2.5.0
+
+  # Navegación
+  go_router: ^14.0.0
+
+  # Servicio en segundo plano (telemetría del conductor)
+  flutter_background_service: ^5.0.0
+
+  # Diseño y animaciones
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/

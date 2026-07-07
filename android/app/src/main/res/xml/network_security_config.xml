@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Política de red:
+  - Producción: solo tráfico cifrado (HTTPS/WSS). cleartext bloqueado por defecto.
+  - Desarrollo: se permite HTTP (cleartext) únicamente a los hosts locales.
+  Para probar en un dispositivo físico por LAN, agregá la IP del PC como un
+  <domain> más abajo (ej. 192.168.1.100).
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <!-- IP del PC en la LAN (dispositivo físico). Actualizá si tu IP cambia. -->
+        <domain includeSubdomains="true">192.168.0.8</domain>
+        <domain includeSubdomains="true">192.168.0.15</domain>
+    </domain-config>
+</network-security-config>
