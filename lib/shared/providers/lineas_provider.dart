@@ -9,10 +9,22 @@ final apiServiceUsuarioProvider = Provider<ApiServiceUsuario>(
   (ref) => ApiServiceUsuario(),
 );
 
+/// Entero inicial del número de línea, para ordenar 1,2,…,10,110 y no 1,10,110,2
+/// (el número es texto). Las que no empiezan con dígito quedan al final.
+int _ordenLinea(String numero) {
+  final m = RegExp(r'^\d+').firstMatch(numero.trim());
+  return m != null ? int.parse(m.group(0)!) : 1 << 30;
+}
+
 final lineasProvider = FutureProvider<List<LineaResumen>>((ref) async {
   final api = ref.read(apiServiceUsuarioProvider);
   final data = await api.getLineas();
-  return data.map((j) => LineaResumen.fromJson(j)).toList();
+  final lineas = data.map((j) => LineaResumen.fromJson(j)).toList();
+  lineas.sort((a, b) {
+    final c = _ordenLinea(a.numero).compareTo(_ordenLinea(b.numero));
+    return c != 0 ? c : a.numero.compareTo(b.numero);
+  });
+  return lineas;
 });
 
 final lineaDetalleProvider = FutureProvider.family<LineaDetalle, String>(
